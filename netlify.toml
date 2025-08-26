@@ -1,0 +1,63 @@
+# netlify.toml
+
+# Enforce HTTPS (Netlify subdomain)
+[[redirects]]
+  from = "http://point-extractor.netlify.app/*"
+  to = "https://point-extractor.netlify.app/:splat"
+  status = 301
+  force = true
+
+# If you later use a custom domain, add a similar http -> https rule for it.
+
+# SPA fallback (Next static export / client-side routing)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Global security headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+  Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+  X-Frame-Options = "DENY"
+  X-Content-Type-Options = "nosniff"
+  Referrer-Policy = "strict-origin-when-cross-origin"
+  Permissions-Policy = "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
+  Cross-Origin-Resource-Policy = "same-origin"
+  Cross-Origin-Opener-Policy = "same-origin"
+
+# Conservative caching
+# HTML should not be cached by browsers or shared proxies
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+  Cache-Control = "no-store"
+
+# Fingerprinted static assets (adjust path patterns to your build output)
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+  Cache-Control = "public, max-age=31536000, immutable"
+
+# CSP: start with a non-breaking baseline, then tighten
+[[headers]]
+  for = "/*"
+  [headers.values]
+  # Start with this while you validate in browser
+  # Tighten connect-src/img-src/font-src as you confirm domains in use.
+  Content-Security-Policy = """
+    default-src 'self';
+    base-uri 'self';
+    frame-ancestors 'none';
+    object-src 'none';
+    form-action 'self';
+    img-src 'self' data: https:;
+    font-src 'self' https:;
+    style-src 'self' 'unsafe-inline';
+    script-src 'self';
+    connect-src 'self';
+    worker-src 'self';
+    frame-src 'none';
+    manifest-src 'self';
+  """
