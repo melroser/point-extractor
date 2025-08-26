@@ -1,6 +1,6 @@
 # Point Extractor
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/YOUR-BADGE-ID/deploy-status)](https://app.netlify.com/sites/point-extractor/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/295f8d1c-f02e-4359-bfa7-05ab78013106/deploy-status)](https://app.netlify.com/projects/point-extractor/deploys)
 
 A simple tool to distill verbose text into clear, actionable bullet points for better AI chatbot interactions.
 
