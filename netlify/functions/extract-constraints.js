@@ -1,9 +1,7 @@
-const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
-
 const AI_PROVIDERS = {
   'xAI (Grok)': {
     endpoint: 'https://api.x.ai/v1/chat/completions',
-    model: 'grok-beta',
+    model: 'grok-3',
     envKey: 'XAI_API_KEY',
     headers: (apiKey) => ({
       'Content-Type': 'application/json',
