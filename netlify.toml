@@ -9,55 +9,43 @@
 
 # If you later use a custom domain, add a similar http -> https rule for it.
 
-# SPA fallback (Next static export / client-side routing)
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[dev]
+  framework = "next"
+  targetPort = 3000
+  publish = ".next"
+  functions = "netlify/functions"
+  command = "next dev"
+
+# Redirects for SPA
 [[redirects]]
   from = "/*"
   to = "/index.html"
+  status = 200
+
+# API proxy - fixed path format
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
   status = 200
 
 # Global security headers
 [[headers]]
   for = "/*"
   [headers.values]
-  Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
   X-Frame-Options = "DENY"
   X-Content-Type-Options = "nosniff"
+  X-XSS-Protection = "1; mode=block"
   Referrer-Policy = "strict-origin-when-cross-origin"
-  Permissions-Policy = "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
-  Cross-Origin-Resource-Policy = "same-origin"
-  Cross-Origin-Opener-Policy = "same-origin"
+  Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://*.openai.com https://*.anthropic.com https://*.googleapis.com https://*.cohere.ai; frame-ancestors 'none'; base-uri 'self'; form-action 'self';"
 
-# Conservative caching
-# HTML should not be cached by browsers or shared proxies
+# CORS headers for API
 [[headers]]
-  for = "/index.html"
+  for = "/api/*"
   [headers.values]
-  Cache-Control = "no-store"
-
-# Fingerprinted static assets (adjust path patterns to your build output)
-[[headers]]
-  for = "/_next/static/*"
-  [headers.values]
-  Cache-Control = "public, max-age=31536000, immutable"
-
-# CSP: start with a non-breaking baseline, then tighten
-[[headers]]
-  for = "/*"
-  [headers.values]
-  # Start with this while you validate in browser
-  # Tighten connect-src/img-src/font-src as you confirm domains in use.
-  Content-Security-Policy = """
-    default-src 'self';
-    base-uri 'self';
-    frame-ancestors 'none';
-    object-src 'none';
-    form-action 'self';
-    img-src 'self' data: https:;
-    font-src 'self' https:;
-    style-src 'self' 'unsafe-inline';
-    script-src 'self';
-    connect-src 'self';
-    worker-src 'self';
-    frame-src 'none';
-    manifest-src 'self';
-  """
+  Access-Control-Allow-Origin = "*"
+  Access-Control-Allow-Methods = "GET, POST, OPTIONS"
+  Access-Control-Allow-Headers = "Content-Type"
