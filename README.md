@@ -2,7 +2,7 @@
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/295f8d1c-f02e-4359-bfa7-05ab78013106/deploy-status)](https://app.netlify.com/projects/point-extractor/deploys)
 
-A simple tool to distill verbose text into clear, actionable bullet points for better AI chatbot interactions.
+A tool for visualizing the constraints in a bunch of text.
 
 **🔗 Try it now: [point-extractor.netlify.app](https://point-extractor.netlify.app/)**
 
